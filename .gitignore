@@ -1,0 +1,30 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Private notes and datasets
+/docs/private/
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/notebooks/local/
+
+# Python environments and generated files
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ipynb_checkpoints/
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
+
+# Personal EDA findings and learning commentary
+/notebooks/01_initial_eda.ipynb
+/notebooks/02_baseline_recommender.ipynb
