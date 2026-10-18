@@ -8,7 +8,7 @@ Potential signals include genres, release year, cast, episode count, public rati
 
 ## Current development phase
 
-The project is in Phase 2: simple recommendation baselines and retrospective evaluation. Architecture choices below are planned unless implemented and verified in the repository; do not assume services or credentials already exist.
+The project includes recommendation baselines and an exploratory supervised personal-rating model. Architecture choices below are planned unless implemented and verified in the repository; do not assume services or credentials already exist.
 
 Repository foundation is implemented: package configuration, local environment, initial EDA notebook, and data-quality checks. The temporary MyDramaList adapter and interactive metadata preview/CSV save flow are implemented. Reproducible Excel import is implemented for existing personal history; prioritize it over a dedicated manual-entry interface. Database integration remains pending.
 
@@ -21,7 +21,9 @@ Current scope:
 5. Begin exploratory data analysis (EDA).
 6. Maintain a provisional candidate catalog, public-quality and content-similarity baselines, and leakage-aware retrospective evaluation. See `docs/baseline_recommender.md`. Supervised probability prediction and agents remain future work.
 
-Limit Phase 2 to simple ranking baselines and evaluation unless the user explicitly expands the scope. Do not add an AI agent, RAG system, web application, or probability prediction model yet. Preserve existing work and Git history. Keep these instructions updated when architectural decisions or development phases change.
+7. Compare mean-rating prediction with Ridge regression using training-only preprocessing and nested alpha selection. See `docs/rating_prediction.md`. The target is numerical rating among completed dramas, not enjoyment probability.
+
+Current authorized scope includes ranking baselines and exploratory Ridge rating prediction. Do not add an AI agent, RAG system, web application, or probability prediction model yet. Preserve existing work and Git history. Keep these instructions updated when architectural decisions or development phases change.
 
 ## Long-term architecture
 
@@ -129,6 +131,8 @@ reports/                 # Shareable findings and figures
 ## Documentation
 
 Keep tracked documentation focused on product behavior, setup, architecture, data contracts, operations, and limitations. Comments and docstrings should describe implementation behavior and non-obvious constraints.
+
+Public notebooks live in `notebooks/public/`. Keep them focused on analytical purpose, methods and limitations, without personal findings, saved outputs or attachments. Execute copies under ignored `notebooks/local/` when using personal data. Preserve the separate ignored personal notebooks.
 
 Keep personal tutorials and explanatory notes in `docs/private/`, which must remain in `.gitignore`. If `docs/private/README.md` exists, read it for local communication preferences. Do not commit files from this folder.
 

@@ -8,9 +8,11 @@ Public ratings summarize audience opinion but do not describe an individual's pr
 
 ## Current phase
 
+See the [data science development report](docs/data_science_report.md) for pipeline stages, implemented methods, evaluation scope and outstanding work.
+
 Phase 2: recommendation baselines and retrospective evaluation. The Python package provides metadata retrieval, reproducible import and analysis, a vote-adjusted public-rating baseline, and content-based ranking. Local, Git-ignored notebooks analyze personal snapshots and compare ranking metrics without network requests.
 
-Metadata lookup and confirmed CSV saving are available. Existing Excel watch history is imported through a reproducible cleaning command. Supabase, supervised enjoyment prediction, probability calibration, MCP tools, RAG, agents, and a web interface remain planned.
+Metadata lookup and confirmed CSV saving are available. Existing Excel watch history is imported through a reproducible cleaning command. An exploratory Ridge model predicts numerical personal ratings and is evaluated against a training-mean baseline. Supabase, enjoyment-probability prediction, probability calibration, MCP tools, RAG, agents, and a web interface remain planned.
 
 ## Planned architecture
 
@@ -53,7 +55,7 @@ Open `notebooks/01_initial_eda.ipynb` using the environment's Python kernel. Ini
 
 The personal EDA notebook reads `data/processed/watch_history_enriched.csv` and reports descriptive rating, genre, cast and completion patterns. Excel import produces a cleaned dataset, and metadata enrichment produces the enriched snapshot. The initial collection file is `data/raw/watch_history.csv`; see [the CSV contract](docs/watch_history_schema.md). Keep missing ratings blank and use the 1–10 scale with at most one decimal place.
 
-Dependencies are declared in `pyproject.toml`. JupyterLab provides the notebook interface. HTTPX is the metadata HTTP client. Database drivers, scikit-learn, and agent libraries are not required yet.
+Dependencies are declared in `pyproject.toml`. JupyterLab provides the notebook interface. HTTPX is the metadata HTTP client. Scikit-learn provides Ridge regression, pipelines and nested cross-validation. Database drivers and agent libraries are not required yet.
 
 ## Checks
 
@@ -88,7 +90,7 @@ Supabase and metadata credentials must remain in environment variables. Do not e
 1. Repository foundation and initial EDA scaffold — available.
 2. Metadata retrieval and confirmed CSV updates — available; database schema and dedicated personal-data entry interface — planned.
 3. Provisional starter catalog and evaluated recommendation baselines — available; broader catalog acquisition remains pending.
-4. Predictive modeling and probability-calibration assessment.
+4. Exploratory personal-rating prediction — available; enjoyment probabilities and calibration — planned.
 5. Evidence retrieval, MCP tools, and orchestration agent.
 6. Web interface, access controls, and feedback collection.
 
@@ -142,6 +144,8 @@ Creates a separate enriched dataset and review files without modifying the clean
 
 ## Descriptive analysis
 
+Public analysis workflows are available in [notebooks/public](notebooks/public/README.md): watch-history exploration and recommendation baseline comparison. They document methods, outputs and limitations without saved personal findings. Copy them to `notebooks/local/` before running against local datasets.
+
 `src/dr_drama/analysis/eda.py` provides schema-aware loading, separate genre/cast membership expansion, group summaries with explicit denominators, and descriptive correlations. It performs no network requests or model fitting. The personal local notebook covers viewing counts, ratings, genre and actor summaries, completion/drop patterns, favorites, and limitations. Original datasets are not modified.
 
 ## Recommendation baselines
@@ -159,3 +163,9 @@ A provisional catalog can be built from existing local MDL detail caches:
 The catalog is a search-biased starter set, not a full discovery feed. The command makes no network requests and preserves source history. Review identity, coverage, sequel requirements and availability before relying on suggestions. A fresh clone needs its own local data and caches.
 
 The local `notebooks/02_baseline_recommender.ipynb` presents examples and evaluation, and saves results under `data/processed/baseline/`. Both personal notebooks and their output datasets are ignored by Git and are not distributed with a fresh clone. No additional dependencies are required for these baselines.
+
+## Personal-rating prediction
+
+`src/dr_drama/models/rating_prediction.py` compares a training-mean predictor with Ridge using binary genres and standardized public rating. Five outer folds assess raw out-of-fold predictions; three inner folds select alpha with preprocessing fitted inside each training split. Primary evaluation is MAE in rating points, with RMSE as a secondary measure. Scores are not enjoyment probabilities.
+
+See the [rating prediction contract](docs/rating_prediction.md) and [public workflow](notebooks/public/03_rating_prediction.ipynb). The ignored personal notebook `notebooks/03_rating_prediction.ipynb` includes local results and saves reproducibility artifacts to `data/processed/rating_prediction/`. No new metadata requests are required. Candidate predictions are optional and do not constitute validation on unseen outcomes.

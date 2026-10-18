@@ -28,3 +28,4 @@ Thumbs.db
 # Personal EDA findings and learning commentary
 /notebooks/01_initial_eda.ipynb
 /notebooks/02_baseline_recommender.ipynb
+/notebooks/03_rating_prediction.ipynb
